@@ -1,4 +1,4 @@
-# 📊 Predicting Telecom Customer Churn to Improve Customer Retention
+# Predicting Telecom Customer Churn to Improve Customer Retention
 
 ---
 
