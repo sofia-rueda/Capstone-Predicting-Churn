@@ -98,7 +98,7 @@ Model interpretability techniques, including global feature importance and local
 
 ### Hyperparameter Tuning
 - Logistic Regression: GridSearchCV (Best C = 0.1)
-- XGBoost: tuned depth, learning rate, estimators, subsampling
+- XGBoost: tuned depth (6), learning rate (0.03), estimators (200), subsampling (0.7)
 
 ### Validation
 - Cross-validation used for generalization  
