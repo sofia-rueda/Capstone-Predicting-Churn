@@ -6,8 +6,8 @@ import pandas as pd
 # -------------------------
 # LOAD MODEL
 # -------------------------
-model = joblib.load("churn_model.pkl")
-model_columns = joblib.load("model_columns.pkl")
+model = joblib.load("logistic_regression_model.pkl")
+model_columns = joblib.load("logistic_regression_columns.pkl")
 
 # -------------------------
 # PAGE CONFIG
