@@ -27,7 +27,7 @@ Model interpretability techniques, including global feature importance and local
 
 ## 3. Data  
 
-- **Source:** Telco Customer Churn Dataset (Kaggle) *(link to be added)*  
+- **Source:** [Telco Customer Churn Dataset (Kaggle)](https://www.kaggle.com/datasets/alfathterry/telco-customer-churn-11-1-3/data)  
 - **Type:** Structured tabular data  
 - **Size:** 7,043 customer records  
 
@@ -128,12 +128,16 @@ Logistic Regression (L1 with class weighting) was selected due to:
 ## 10. Model Interpretation (SHAP)  
 
 ### Global Insights
+<img width="796" height="940" alt="Monthly Charge" src="https://github.com/user-attachments/assets/bf218d07-74f6-4752-a2a4-5aeec65aed46" />
+
 - Referrals → strongest retention signal  
 - Monthly charges → strongest churn driver  
 - Contract type → reduces churn significantly  
 - Tenure → strong retention factor  
 
 ### Local Insights
+<img width="910" height="600" alt="2 159 - Number of Referrals" src="https://github.com/user-attachments/assets/439cdc2b-bd29-483b-89da-6ad0070a19c6" />
+
 - High charges increase churn probability  
 - Referrals and contracts reduce churn risk  
 - Prediction reflects balance of behavioral signals  
