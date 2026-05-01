@@ -1,0 +1,130 @@
+#Deployment Script
+
+import streamlit as st
+import joblib
+import pandas as pd
+# -------------------------
+# LOAD MODEL
+# -------------------------
+model = joblib.load("churn_model.pkl")
+model_columns = joblib.load("model_columns.pkl")
+
+# -------------------------
+# PAGE CONFIG
+# -------------------------
+st.set_page_config(page_title="Churn Prediction", layout="centered")
+
+# -------------------------
+# HEADER
+# -------------------------
+st.title("📊 Customer Churn Prediction System")
+st.write("Predict churn risk and get actionable retention strategies.")
+
+st.markdown("---")
+
+# -------------------------
+# INPUT SECTION
+# -------------------------
+st.subheader(" Customer Information")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    monthly_charge = st.number_input("Monthly Charge ($)", 0.0, 200.0, 70.0)
+    tenure = st.number_input("Tenure (Months)", 0, 100, 12)
+
+with col2:
+    contract = st.selectbox("Contract Type",
+                            ["Month-to-month", "One Year", "Two Year"])
+    referrals = st.number_input("Number of Referrals", 0, 20, 0)
+
+st.markdown("---")
+
+# -------------------------
+# ENCODING
+# -------------------------
+input_dict = {
+    "Monthly Charge": monthly_charge,
+    "Tenure in Months": tenure,
+    "Number of Referrals": referrals,
+    "Contract_One Year": 1 if contract == "One Year" else 0,
+    "Contract_Two Year": 1 if contract == "Two Year" else 0,
+}
+
+input_df = pd.DataFrame([input_dict])
+input_df = input_df.reindex(columns=model_columns, fill_value=0)
+
+# -------------------------
+# PREDICTION BUTTON
+# -------------------------
+if st.button("Predict Churn Risk", key="predict_button"):
+    prob = model.predict_proba(input_df)[0][1]
+
+    st.markdown("---")
+    st.subheader(" Prediction Result")
+
+    st.metric(label="Churn Probability", value=f"{prob:.2f}")
+
+    # -------------------------
+    # RISK LEVEL
+    # -------------------------
+    if prob < 0.3:
+        st.success("🟢 Low Risk of Churn")
+    elif prob < 0.6:
+        st.warning("🟡 Medium Risk of Churn")
+    else:
+        st.error("🔴 High Risk of Churn")
+
+    st.markdown("---")
+
+    # -------------------------
+    #  RETENTION STRATEGY PANEL
+    # -------------------------
+    st.subheader(" Retention Strategy Recommendations")
+
+    recommendations = []
+
+    # Pricing logic
+    if monthly_charge > 100:
+        recommendations.append(" Offer a discount or pricing incentive")
+    elif monthly_charge > 70:
+        recommendations.append(" Provide small loyalty discounts or bundles")
+
+    # Contract logic
+    if contract == "Month-to-month":
+        recommendations.append(" Encourage upgrade to long-term contract")
+
+    # Engagement logic
+    if referrals == 0:
+        recommendations.append(" Introduce referral incentives")
+    elif referrals < 3:
+        recommendations.append(" Promote referral programs")
+
+    # Tenure logic
+    if tenure < 6:
+        recommendations.append(" Improve onboarding and early engagement")
+    elif tenure < 18:
+        recommendations.append(" Offer loyalty perks to strengthen retention")
+
+    if len(recommendations) > 0:
+        for rec in recommendations:
+            st.write(rec)
+    else:
+        st.write(" Customer shows strong retention signals.")
+
+    st.markdown("---")
+
+
+
+    # -------------------------
+    #  BUSINESS SUMMARY
+    # -------------------------
+    st.subheader(" Summary Insight")
+
+    if prob >= 0.6:
+        st.write("High churn risk detected. Immediate retention action recommended.")
+    elif prob >= 0.3:
+        st.write("Moderate churn risk. Preventive engagement strategies advised.")
+    else:
+        st.write("Customer is stable. Focus on maintaining satisfaction.")
+
